@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function gsb_program_finder_menu() {
+  $items = array();
+  $items['admin/config/gsb/program-finder'] = array(
+    'title' => 'Program Finder',
+    'description' => 'Config Program Finder Image CTAs',
+    'access arguments' => array('administer program finder image ctas'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('gsb_program_finder_config_main_image_ctas'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'gsb_program_finder.admin.inc',
+  );
+  $items['admin/config/gsb/program-finder/main'] = array(
+    'title' => 'Main Program Finder',
+    'access arguments' => array('administer program finder image ctas'),
+    'weight' => -10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'gsb_program_finder.admin.inc',
+  );
+  $items['admin/config/gsb/program-finder/ee'] = array(
+    'title' => 'Exec Education Program Finder',
+    'description' => 'Config Exec Education Image CTAs',
+    'access arguments' => array('administer program finder image ctas'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('gsb_program_finder_config_ee_image_ctas'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'gsb_program_finder.admin.inc',
+  );
+  return $items;
+}
