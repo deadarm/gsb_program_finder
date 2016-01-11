@@ -1,0 +1,6 @@
+name = GSB Program Finder
+core = 7.x
+package = GSB
+version = 7.x-1.0
+project = gsb_program_finder
+
