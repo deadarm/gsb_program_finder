@@ -32,3 +32,15 @@ function gsb_program_finder_menu() {
   );
   return $items;
 }
+
+/**
+ * Implements hook_permission().
+ */
+function gsb_program_finder_permission() {
+  return array(
+    'administer program finder image ctas' =>  array(
+      'title' => t('Administer Program Finder Image CTAs'),
+      'description' => t('Configure Program Finder Image CTAs settings.'),
+    ),
+  );
+}
