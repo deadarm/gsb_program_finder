@@ -27,18 +27,18 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
   $select->addField('dt', 'field_instance_date_value', 'start_date');
   $select->addField('dt', 'field_instance_date_value2', 'end_date');
 
-  if (!empty($_GET['filter_date_range_from'])) {
-    dpm("HERE");
-    $condition = db_or();
-    foreach($_GET['filter_data_date_range_from'] as $value) {
-      dpm($value);
-//      $term_parts = explode('--', $value);
-//      $tid = (int) array_pop($term_parts);
-//      $condition->condition('dt.field_instance_date_value', $tid);
-    }
-
-    $select->condition($condition);
-  }
+//  if (!empty($_GET['filter_date_range_from'])) {
+//    dpm("HERE");
+//    $condition = db_or();
+//    foreach($_GET['filter_data_date_range_from'] as $value) {
+//
+////      $term_parts = explode('--', $value);
+////      $tid = (int) array_pop($term_parts);
+////      $condition->condition('dt.field_instance_date_value', $tid);
+//    }
+//
+//    $select->condition($condition);
+//  }
   //Topics
   //field_data_field_program_topics
   $select->leftJoin('field_data_field_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
@@ -89,7 +89,6 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
   if (!empty($_GET['filter_locations'])) {
     $condition = db_or();
     foreach($_GET['filter_locations'] as $value) {
-      // dpm($value);
       $term_parts = explode('--', $value);
       $tid = (int) array_pop($term_parts);
       $condition->condition('ttd_loc.tid', $tid);
@@ -112,7 +111,6 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
   $program_locations = array();
   $program = array();
   while ($result = $query->fetchObject()) {
-    dpm($result->program_locations);
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
     $program[$nid]['program_title'] = $result->program_title;
@@ -141,7 +139,6 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
       'title' => $data['title'],
       'program_title' => $data['program_title'],
       'program_topic' => $data['program_topic'],
-      //'program_topic' => $program_topic,
       'leadership_level' => $data['leadership_level'],
       'program_location' => $data['program_location'],
       'program_teaser' => $data['program_teaser'],
@@ -219,14 +216,11 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
   $location_results = $location_query->execute();
 
   while ($program_location = $location_results->fetchAssoc()) {
-    //dpm($program_location['name']);
     $key = drupal_html_class($program_location['name']);
     $program_locations[$key] = $program_location['name'];
   }
   asort($program_locations);
 
-  //dpm($program_topics);
-  // dpm($leadership_levels);
   $options = array(
     'filters' => array(
       'search' => array(
@@ -266,7 +260,6 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
     ),
     'id' => 'program_list',
   );
-//dpm($items);
   $output = isotopify_prepare($items, $options);
   return (object) array(
     'content' => array(

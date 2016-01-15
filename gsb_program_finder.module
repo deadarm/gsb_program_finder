@@ -82,8 +82,8 @@ function gsb_program_finder_search($search = '') {
   foreach ($terms as $key => $term) {
     $select->condition('sf.field_search_field_value', '% ' . $term . ' %', 'LIKE');
   }
-  dpm('program finder search');
-  dpq($select);
+//  dpm('program finder search');
+//  dpq($select);
   $entries = $select->execute()->fetchAll(PDO::FETCH_ASSOC);
   $output = array();
   foreach ($entries as $entry) {
