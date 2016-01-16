@@ -27,25 +27,12 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
   $select->addField('dt', 'field_instance_date_value', 'start_date');
   $select->addField('dt', 'field_instance_date_value2', 'end_date');
 
-//  if (!empty($_GET['filter_date_range_from'])) {
-//    dpm("HERE");
-//    $condition = db_or();
-//    foreach($_GET['filter_data_date_range_from'] as $value) {
-//
-////      $term_parts = explode('--', $value);
-////      $tid = (int) array_pop($term_parts);
-////      $condition->condition('dt.field_instance_date_value', $tid);
-//    }
-//
-//    $select->condition($condition);
-//  }
   //Topics
   //field_data_field_program_topics
   $select->leftJoin('field_data_field_program_topics', 'pt', 'n2.nid = pt.entity_id AND pt.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_pt', 'pt.field_program_topics_tid = ttd_pt.tid');
   $select->addField('ttd_pt', 'tid', 'program_topics_tid');
   $select->addField('ttd_pt', 'name', 'program_topics');
-  //dpm($select);
   if (!empty($_GET['filter_program_topics'])) {
     $condition = db_or();
     foreach($_GET['filter_program_topics'] as $value) {
@@ -54,11 +41,10 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
       $tid = (int) array_pop($term_parts);
       $condition->condition('ttd_pt.tid', $tid);
     }
-
     $select->condition($condition);
   }
 
-//  //Leadership Level
+  //Leadership Level
   $select->leftJoin('field_data_field_leadership_level', 'll', 'n2.nid = ll.entity_id AND ll.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_ll', 'll.field_leadership_level_tid = ttd_ll.tid');
   $select->addField('ttd_ll', 'tid', 'leadership_level_tid');
@@ -71,15 +57,10 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
       $tid = (int) array_pop($term_parts);
       $condition->condition('ttd_ll.tid', $tid);
     }
-
     $select->condition($condition);
   }
-  //Date Range
+
   //Location
-//  $select->leftJoin('field_data_field_program_location_category', 'loc', 'n.nid = loc.entity_id AND loc.deleted = 0');
-//  $select->leftJoin('taxonomy_term_data', 'ttd_loc', 'loc.field_program_location_category_tid = ttd_loc.tid');
-//  $select->addField('ttd_loc', 'tid', 'program_location_category_tid');
-//  $select->addField('ttd_loc', 'name', 'program_locations');
   $select->leftJoin('field_data_field_program_location', 'pl', 'n.nid = pl.entity_id');
   $select->leftJoin('field_data_field_program_location_category', 'loc', 'pl.field_program_location_value = loc.entity_id AND loc.deleted = 0');
   $select->leftJoin('taxonomy_term_data', 'ttd_loc', 'loc.field_program_location_category_tid = ttd_loc.tid');
@@ -102,14 +83,13 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
     $select->condition('sf.field_search_field_value', '%' . $_GET['search'] . '%', 'LIKE');
   }
   $select->orderBy('title','ASC');
-  //dpq($select);
   $query = $select->execute();
-//dpm($query);
   $items = '';
   $leadership_levels = array();
   $program_topics = array();
   $program_locations = array();
   $program = array();
+
   while ($result = $query->fetchObject()) {
     $nid = $result->nid;
     $program[$nid]['title'] = $result->title;
@@ -118,8 +98,8 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
     $program[$nid]['leadership_level'] = $result->leadership_levels;
     $program[$nid]['program_location'] = $result->program_locations;
     $program[$nid]['program_teaser'] = $result->program_teaser;
-    $program[$nid]['start_date'] = $result->start_date;
-    $program[$nid]['end_date'] = $result->end_date;
+    $program[$nid]['start_date'] = ($result->start_date);
+    $program[$nid]['end_date'] = ($result->end_date);
   }
 
   foreach ($program as $nid => $data) {
@@ -147,21 +127,15 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
       //'link' => $data['link'],
       'nid' => $nid,
     );
-    // Convert to timetamps
-    $min = strtotime('10-01-2015');
-    $max = strtotime('10-01-2016');
 
-    // Generate random number using above bounds
-    $val = rand($min, $max);
 
     // Convert back to desired date format
-    $daterange =  date('Ymd', $val);
-
+    $date =  date('Ymd', strtotime($data['start_date']));
     $parameters = array(
       'data' => theme('program_isotope_item', $variables),
       'item-id' => $nid,
       'filters' => array(
-        'daterange' => array($daterange),
+        'daterange' => array($date),
       ),
     );
 
@@ -193,7 +167,6 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
     $program_topics[$key] = $program_topic['name'];
   }
   asort($program_topics);
-  //dpm($program_topics);
   // Get all leadership levels
   $leadership_level_query = db_select('taxonomy_term_data', 'ttd');
   $leadership_level_query->fields('ttd', array('tid', 'name'));

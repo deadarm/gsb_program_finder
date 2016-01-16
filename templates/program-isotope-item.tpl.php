@@ -3,13 +3,15 @@
 </div>-->
 <!--<div class="program-title" style="padding-right:300px">
   <?php //print $title; ?>
-</div> -->
+</div>-->
 <div class="program-title" style="padding-right:300px;font-weight: bold;margin-top:20px">
   <?php print $program_title; ?>
 </div>
+<?php if($start_date != '' && $end_date != '' ) { ?>
 <div class="program-date" style="padding-right:300px">
   <?php print date_format(date_create($start_date),'d M Y').' - '.date_format(date_create($end_date),'d M Y'); ?>
 </div>
+<?php } ?>
 <?php if ($program_location != '') { ?>
   <div class="program-location" style="padding-right:300px;font-weight: bold;">
     <?php print $program_location; ?>
