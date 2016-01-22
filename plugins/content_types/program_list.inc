@@ -134,6 +134,10 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
     $parameters = array(
       'data' => theme('program_isotope_item', $variables),
       'item-id' => $nid,
+      'sort' => array(
+        'start_date' => $data['start_date'],
+        'end_date' => $data['end_date'],
+      ),
       'filters' => array(
         'daterange' => array($date),
       ),
@@ -226,6 +230,15 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
         'type' => 'submit',
         'title' => t('Search'),
       ),
+      'sort' => array(
+        'type' => 'sort',
+        'title' => t('Sort'),
+        'options' => array(
+          'start_date' => t('Sort by Start Date'),
+          'end_date' => t('Sort by End Date'),
+        ),
+        'default' => 'start_date'
+      )
     ),
     'settings' => array(
       'callback' => '/program-search',
