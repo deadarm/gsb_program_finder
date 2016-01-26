@@ -246,13 +246,12 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
     ),
     'id' => 'program_list',
   );
-  $output = '<div class="programs" style="float:left;width: 75%">'.isotopify_prepare($items, $options).'</div><div class="image-ctas" style="padding-top:250px" >';
+  $output = '<div class="programs">'.isotopify_prepare($items, $options).'</div><div class="image-ctas">';
   $ee_image_ctas = variable_get('gsb_program_finder_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
   foreach ($entities as $entity) {
-    $output = $output . '<div class="ctas" style="padding:20px">'
-                      . theme('image', array('path' => $entity->field_image_single_public['und'][0]['uri'],
-                            'attributes' => array('width' => '200px')))
+    $output = $output . '<div class="ctas">'
+                      . theme('image', array('path' => $entity->field_image_single_public['und'][0]['uri']))
                       .'</div>';
   }
   $output .= '</div></div>';
