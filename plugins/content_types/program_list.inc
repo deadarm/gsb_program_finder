@@ -250,7 +250,7 @@ function gsb_program_finder_program_list_content_type_render($subtype, $conf, $p
   $ee_image_ctas = variable_get('gsb_program_finder_config_ee_image_ctas', array());
   $entities = entity_load('fieldable_panels_pane', $ee_image_ctas);
   foreach ($entities as $entity) {
-    $output = $output . '<div class="ctas">'
+    $output = $output . '<div class="cta">'
                       . theme('image', array('path' => $entity->field_image_single_public['und'][0]['uri']))
                       .'</div>';
   }
